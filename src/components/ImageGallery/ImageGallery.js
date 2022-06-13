@@ -3,15 +3,17 @@ import PropTypes from 'prop-types';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import s from './ImageGallery.module.css';
 
-function ImageGallery({ pictures, onClick }) {
+function ImageGallery({ pictures, onClick, onHandleModalImg }) {
   return (
     <ul className={s.ImageGallery}>
-      {pictures.map(({ id, webformatURL, tags }) => (
+      {pictures.map(({ id, webformatURL, largeImageURL, tags }) => (
         <ImageGalleryItem
           key={id}
           img={webformatURL}
-          name={tags}
+          largeImageURL={largeImageURL}
+          tags={tags}
           onClick={onClick}
+          onHandleModalImg={onHandleModalImg}
         />
       ))}
     </ul>
@@ -25,6 +27,7 @@ ImageGallery.propTypes = {
     })
   ),
   onClick: PropTypes.func.isRequired,
+  onHandleModalImg: PropTypes.func.isRequired,
 };
 
 export default ImageGallery;

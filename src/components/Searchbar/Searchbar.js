@@ -9,7 +9,6 @@ export class Searchbar extends Component {
 
   handleRequest = event => {
     this.setState({ request: event.currentTarget.value.toLowerCase().trim() });
-    // this.setState({ request: '' });
   };
 
   handleSubmit = event => {
