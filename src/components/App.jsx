@@ -99,7 +99,7 @@ export class App extends Component {
     return (
       <>
         <Searchbar onSubmit={this.handleRequestValue} />
-        {pictures && (
+        {pictures.length !== 0 && (
           <ImageGallery
             pictures={pictures}
             onClick={this.toggleModal}
