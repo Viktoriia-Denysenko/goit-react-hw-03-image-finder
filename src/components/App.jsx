@@ -13,6 +13,7 @@ export class App extends Component {
   state = {
     request: '',
     pictures: [],
+    totalPictures: null,
     status: 'idle',
     page: 1,
     error: null,
@@ -63,6 +64,7 @@ export class App extends Component {
             return this.setState(prevState => {
               return {
                 pictures: [...prevState.pictures, picture],
+                totalPictures: response.total,
                 status: 'resolve',
               };
             });
@@ -85,49 +87,38 @@ export class App extends Component {
   };
 
   render() {
-    const { showModal, pictures, error, modalImg, modalAlt, status } =
-      this.state;
-
-    if (status === 'idle') {
-      return <Searchbar onSubmit={this.handleRequestValue} />;
-    }
-
-    if (status === 'pending') {
-      return (
-        <>
-          <Searchbar onSubmit={this.handleRequestValue} />
+    const {
+      showModal,
+      pictures,
+      error,
+      modalImg,
+      modalAlt,
+      status,
+      totalPictures,
+    } = this.state;
+    return (
+      <>
+        <Searchbar onSubmit={this.handleRequestValue} />
+        {pictures && (
           <ImageGallery
             pictures={pictures}
             onClick={this.toggleModal}
             onHandleModalImg={this.handleModalImg}
           />
-          <Loader />
-        </>
-      );
-    }
-
-    if (status === 'resolve') {
-      return (
-        <>
-          <Searchbar onSubmit={this.handleRequestValue} />
-          <ImageGallery
-            pictures={pictures}
-            onClick={this.toggleModal}
-            onHandleModalImg={this.handleModalImg}
-          />
-          {showModal && (
-            <Modal onClose={this.toggleModal}>
-              <img src={modalImg} alt={modalAlt} />
-            </Modal>
-          )}
-          {pictures.length !== 0 && <Button loadMore={this.loadMore} />}
-          <ToastContainer autoClose={3000} />
-        </>
-      );
-    }
-
-    if (status === 'rejected') {
-      return alert(`Whoops, something went wrong: ${error.message}`);
-    }
+        )}
+        {showModal && (
+          <Modal onClose={this.toggleModal}>
+            <img src={modalImg} alt={modalAlt} />
+          </Modal>
+        )}
+        {pictures.length !== 0 && totalPictures !== pictures.length && (
+          <Button loadMore={this.loadMore} />
+        )}
+        <ToastContainer autoClose={3000} />
+        {status === 'rejected' &&
+          toast.error(`Whoops, something went wrong: ${error.message}`)}
+        {status === 'pending' && <Loader />}
+      </>
+    );
   }
 }
