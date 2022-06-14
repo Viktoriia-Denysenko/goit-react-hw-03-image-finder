@@ -71,8 +71,6 @@ export class App extends Component {
           });
         }
       });
-
-      this.setState({ status: 'resolve' });
     }
 
     if (this.state.request === '') {
@@ -111,13 +109,15 @@ export class App extends Component {
             <img src={modalImg} alt={modalAlt} />
           </Modal>
         )}
-        {pictures.length !== 0 && totalPictures !== pictures.length && (
-          <Button loadMore={this.loadMore} />
-        )}
+        {status === 'pending' && <Loader />}
+        {status !== 'pending' &&
+          pictures.length !== 0 &&
+          totalPictures !== pictures.length && (
+            <Button loadMore={this.loadMore} />
+          )}
         <ToastContainer autoClose={3000} />
         {status === 'rejected' &&
           toast.error(`Whoops, something went wrong: ${error.message}`)}
-        {status === 'pending' && <Loader />}
       </>
     );
   }
